@@ -10,7 +10,7 @@ public class HomeController {
 
     @GetMapping
     public String home() {
-        return "Welcome! You are successfully logged in.";
+        return "Welcome! You are successfully logged in. In this session you can access all the resources.";
     }
 }
 
