@@ -1,5 +1,6 @@
 package com.example.basicauth.services;
 
+import com.example.basicauth.dtos.LiteUserDTO;
 import com.example.basicauth.dtos.UserRegistrationDto;
 import com.example.basicauth.models.User;
 import com.example.basicauth.repositories.UserRepository;
@@ -33,5 +34,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
-}
+    public Optional<LiteUserDTO> getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .map(user -> new LiteUserDTO(user.getId(), user.getEmail()));
+    }
 
+}
