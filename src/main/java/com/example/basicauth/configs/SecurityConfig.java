@@ -26,11 +26,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)                                                            // Disable CSRF for simplicity
+        http.csrf(AbstractHttpConfigurer::disable)                                                    // Disable CSRF for simplicity
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/users/register", "/api/users/create").permitAll()  // Allow registration and user creation without authentication
-                                .anyRequest().authenticated())                                          // Require authentication for all other requests
-                .httpBasic(withDefaults());                                                            // Enable HTTP Basic Authentication
+                        auth.requestMatchers( "/api/auth/**").permitAll()                           // Allow AuthController endpoints without authentication
+                                .anyRequest().authenticated())                                        // Require authentication for all other requests
+                .httpBasic(withDefaults());                                                           // Enable HTTP Basic Authentication
         return http.build();
     }
 

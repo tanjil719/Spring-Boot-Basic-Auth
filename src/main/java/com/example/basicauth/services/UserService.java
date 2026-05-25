@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -14,7 +16,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    //************ Internal ****************
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 
+    //************ Secured ****************
     public User createUser(UserRegistrationDto userDto) {
 
         User user = new User();
