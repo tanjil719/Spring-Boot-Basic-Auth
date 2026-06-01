@@ -32,7 +32,7 @@ public class AuthController {
 
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> generateTokenAfterLogin(@RequestBody @Valid LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticate(@RequestBody @Valid LoginRequest loginRequest) {
 
         try {
             //Passing the username and password to the AuthenticationManager for authentication

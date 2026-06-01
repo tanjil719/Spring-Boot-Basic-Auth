@@ -1,6 +1,7 @@
 package com.example.basicauth.configs;
 
 
+import com.example.basicauth.filters.JwtAuthenticationFilter;
 import com.example.basicauth.services.CustomUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -22,15 +24,19 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)                                                    // Disable CSRF for simplicity
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers( "/api/auth/**").permitAll()                           // Allow AuthController endpoints without authentication
-                                .anyRequest().authenticated())                                        // Require authentication for all other requests
-                .httpBasic(withDefaults());                                                           // Enable HTTP Basic Authentication
+                                .anyRequest().authenticated());                                       // Require authentication for all other requests
+
+
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);   // Add our custom JWT filter before the default username/password filter
+
         return http.build();
     }
 
