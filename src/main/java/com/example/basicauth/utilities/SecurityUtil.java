@@ -1,7 +1,6 @@
 package com.example.basicauth.utilities;
 
 import com.example.basicauth.constants.JwtConstant;
-import com.example.basicauth.payloads.CustomPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
