@@ -3,6 +3,7 @@ package com.example.basicauth.utilities;
 import com.example.basicauth.constants.JwtConstant;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -50,5 +51,12 @@ public class SecurityUtil {
         return tokenType.cast(token);  // Returns any type R
     }
 
+    public static String encryptPassword(String password) {
+        return new BCryptPasswordEncoder().encode(password);
+    }
+
+    public static boolean matchPassword(String originalPassword, String encryptedPassword) {
+        return new BCryptPasswordEncoder().matches(originalPassword, encryptedPassword);
+    }
 }
 

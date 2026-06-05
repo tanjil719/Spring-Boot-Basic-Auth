@@ -4,6 +4,7 @@ import com.example.basicauth.dtos.LiteUserDTO;
 import com.example.basicauth.dtos.UserRegistrationDto;
 import com.example.basicauth.models.User;
 import com.example.basicauth.repositories.UserRepository;
+import com.example.basicauth.utilities.SecurityUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     //************ Internal ****************
     public Optional<User> findByUsername(String username) {
@@ -28,7 +28,7 @@ public class UserService {
         User user = new User();
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setPassword(SecurityUtil.encryptPassword(userDto.getPassword()));
         user.setEnabled(true);
 
         return userRepository.save(user);
