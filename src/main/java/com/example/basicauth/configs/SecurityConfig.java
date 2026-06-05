@@ -27,11 +27,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)                                                    // Disable CSRF for simplicity
+        http.csrf(AbstractHttpConfigurer::disable)                                                   // Disable CSRF for simplicity
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers( "/api/auth/**").permitAll()                           // Allow AuthController endpoints without authentication
-                                .anyRequest().authenticated());                                       // Require authentication for all other requests
-
+                        auth.requestMatchers("/api/auth/**").permitAll()                           // Allow AuthController endpoints without authentication
+                                .anyRequest().authenticated())                                       // Require authentication for all other requests
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable);                                         // Disable default form login and basic auth
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);   // Add our custom JWT filter before the default username/password filter
 
