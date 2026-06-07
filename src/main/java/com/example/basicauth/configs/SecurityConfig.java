@@ -25,6 +25,9 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    //For authorization spring security filter chain's Authorization filter is used
+    //We need to configure in the filter chain to specify which endpoints is authorized for which role
+    //Here only role is present, permission is not implemented.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)                                                   // Disable CSRF for simplicity
