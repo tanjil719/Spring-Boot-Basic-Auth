@@ -30,6 +30,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)                                                   // Disable CSRF for simplicity
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()                           // Allow AuthController endpoints without authentication
+                                .requestMatchers("/api/users/**").hasRole("ADMIN")                 // Only allow users with ROLE_ADMIN to access UserController endpoints
                                 .anyRequest().authenticated())                                       // Require authentication for all other requests
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);                                         // Disable default form login and basic auth

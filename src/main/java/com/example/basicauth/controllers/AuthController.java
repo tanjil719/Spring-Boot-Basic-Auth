@@ -43,7 +43,8 @@ public class AuthController {
             // Custom principal
             CustomPrincipal customPrincipal = new CustomPrincipal(
                     optionalUser.get().getId(),
-                    loginRequest.getUsername()
+                    loginRequest.getUsername(),
+                    optionalUser.get().getRole()
             );
 
             Token token = JWTUtil.generateToken(customPrincipal);

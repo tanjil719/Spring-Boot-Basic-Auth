@@ -32,16 +32,16 @@ public class CustomUserDetailsService implements UserDetailsService {
                 true,                      // accountNonExpired
                 true,                                      // credentialsNonExpired
                 true,                                      // accountNonLocked
-                getAuthorities()                           // authorities (roles/permissions)
+                getAuthorities(user)                           // authorities (roles/permissions)
         );
     }
 
     // Build collection of authorities for the user
     // Spring Security requires authorities to determine user permissions
     // All users get ROLE_USER by default
-    private Collection<? extends GrantedAuthority> getAuthorities() {
+    private Collection<? extends GrantedAuthority> getAuthorities(User user) {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        authorities.add(new SimpleGrantedAuthority(user.getRole()));
         return authorities;
     }
 }

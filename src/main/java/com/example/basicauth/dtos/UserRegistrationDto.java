@@ -26,5 +26,9 @@ public class UserRegistrationDto {
     @NotNull(message = "Email must not be null")
     @Email(message = "Email should be valid")
     private String email;
+
+    @NotNull(message = "Role must not be null")
+    private String role;
+
 }
 

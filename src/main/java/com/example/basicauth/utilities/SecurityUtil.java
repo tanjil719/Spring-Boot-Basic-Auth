@@ -1,10 +1,14 @@
 package com.example.basicauth.utilities;
 
 import com.example.basicauth.constants.JwtConstant;
+import com.example.basicauth.payloads.CustomPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class SecurityUtil {
@@ -42,10 +46,17 @@ public class SecurityUtil {
      * Any type of authentication token (UsernamePasswordAuthenticationToken, OAuth2Token, etc.)
      */
     public static <T, R> R getAuthentication(T principal, Class<R> tokenType) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        if (principal instanceof CustomPrincipal) {
+            CustomPrincipal cp = (CustomPrincipal) principal;
+            authorities.add(new SimpleGrantedAuthority(cp.getRole()));
+        }
+
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 principal,              // Accepts any type T
                 null,
-                new ArrayList<>()
+                authorities
         );
         return tokenType.cast(token);  // Returns any type R
     }

@@ -13,4 +13,5 @@ import lombok.Setter;
 public class CustomPrincipal {
     private long userId;
     private String username;
+    private String role;
 }
