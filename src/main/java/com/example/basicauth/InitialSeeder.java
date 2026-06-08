@@ -1,6 +1,7 @@
 package com.example.basicauth;
 
 import com.example.basicauth.dtos.UserRegistrationDto;
+import com.example.basicauth.enums.Role;
 import com.example.basicauth.repositories.UserRepository;
 import com.example.basicauth.services.UserService;
 import lombok.AllArgsConstructor;
@@ -28,12 +29,12 @@ public class InitialSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // Check if users already exist to avoid duplicates
         if (userRepository.findByUsername("admin").isEmpty()) {
-            userService.createUser(new UserRegistrationDto("admin", "admin123", "admin@example.com", "ROLE_ADMIN"));
+            userService.createUser(new UserRegistrationDto("admin", "admin123", "admin@example.com", Role.ADMIN));
             System.out.println("Created default admin user with username: admin, password: admin123");
         }
 
         if (userRepository.findByUsername("user").isEmpty()) {
-            userService.createUser(new UserRegistrationDto("user", "user123", "user@example.com", "ROLE_USER"));
+            userService.createUser(new UserRegistrationDto("user", "user123", "user@example.com", Role.USER));
             System.out.println("Created default user with username: user, password: user123");
         }
     }

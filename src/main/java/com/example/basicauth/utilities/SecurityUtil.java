@@ -1,6 +1,7 @@
 package com.example.basicauth.utilities;
 
 import com.example.basicauth.constants.JwtConstant;
+import com.example.basicauth.enums.Role;
 import com.example.basicauth.payloads.CustomPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,7 +51,12 @@ public class SecurityUtil {
 
         if (principal instanceof CustomPrincipal) {
             CustomPrincipal cp = (CustomPrincipal) principal;
-            authorities.add(new SimpleGrantedAuthority(cp.getRole()));
+            Role role = cp.getRole();
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+
+            authorities.addAll(role.getPermissions().stream()
+                    .map(permission -> new SimpleGrantedAuthority(permission.name()))
+                    .toList());
         }
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(

@@ -1,6 +1,7 @@
 package com.example.basicauth.models;
 
 
+import com.example.basicauth.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,7 +30,8 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     private Boolean enabled = true;
 

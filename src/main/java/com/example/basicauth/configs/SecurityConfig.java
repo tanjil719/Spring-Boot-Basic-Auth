@@ -1,11 +1,13 @@
 package com.example.basicauth.configs;
 
 
+import com.example.basicauth.enums.Permissions;
 import com.example.basicauth.filters.JwtAuthenticationFilter;
 import com.example.basicauth.services.CustomUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -29,11 +31,14 @@ public class SecurityConfig {
     //We need to configure in the filter chain to specify which endpoints is authorized for which role
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)                                                   // Disable CSRF for simplicity
+        http.csrf(AbstractHttpConfigurer::disable)                                                                               // Disable CSRF for simplicity
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll()                           // Allow AuthController endpoints without authentication
-                                .requestMatchers("/api/users/**").hasRole("ADMIN")                 // Only allow users with ROLE_ADMIN to access UserController endpoints
-                                .anyRequest().authenticated())                                       // Require authentication for all other requests
+                        auth.requestMatchers("/api/auth/**").permitAll()                                                       // Allow AuthController endpoints without authentication
+//                                .requestMatchers("/api/users/**").hasRole("ADMIN")                                             // Only allow users with ROLE_ADMIN to access UserController endpoints
+                                .requestMatchers(HttpMethod.GET,"/api/users/**").hasAuthority(Permissions.USER_READ.name())    // Only allow users with USER_READ permission to access GET endpoints of UserController
+                                .requestMatchers(HttpMethod.POST,"/api/users/**").hasAuthority(Permissions.USER_CREATE.name())  // Only allow users with USER_CREATE permission to access POST endpoints of UserController
+                                .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAuthority(Permissions.USER_DELETE.name())  // Only allow users with USER_DELETE permission to access DELETE endpoints of UserController
+                                .anyRequest().authenticated())                                                                   // Require authentication for all other requests
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);                                         // Disable default form login and basic auth
 

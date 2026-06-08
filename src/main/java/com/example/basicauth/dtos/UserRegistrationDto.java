@@ -1,6 +1,7 @@
 package com.example.basicauth.dtos;
 
 
+import com.example.basicauth.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -28,7 +29,7 @@ public class UserRegistrationDto {
     private String email;
 
     @NotNull(message = "Role must not be null")
-    private String role;
+    private Role role;
 
 }
 

@@ -40,4 +40,12 @@ public class UserService {
                 .map(user -> new LiteUserDTO(user.getId(), user.getEmail()));
     }
 
+    public boolean deleteUser(long userId) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+            return true;
+        }
+        return false;
+    }
+
 }

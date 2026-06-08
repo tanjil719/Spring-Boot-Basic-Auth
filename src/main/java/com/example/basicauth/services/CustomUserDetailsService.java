@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 true,                      // accountNonExpired
                 true,                                      // credentialsNonExpired
                 true,                                      // accountNonLocked
-                getAuthorities(user)                           // authorities (roles/permissions)
+                getAuthorities(user)                       // authorities (roles/permissions)
         );
     }
 
@@ -41,7 +41,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     // All users get ROLE_USER by default
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRole()));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));    // Prefixing role with "ROLE_" is a common convention in Spring Security
+
+        authorities.addAll(user.getRole().getPermissions().stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.name()))
+                .toList());
+
         return authorities;
     }
 }
