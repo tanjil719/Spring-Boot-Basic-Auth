@@ -6,6 +6,7 @@ import com.example.basicauth.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -17,11 +18,14 @@ public class UserController {
 
     private final UserService userService;
 
+    @PreAuthorize("hasAuthority('USER_CREATE')")
     @PostMapping(value = "/create")
     public ResponseEntity<?> createUser(@RequestBody UserRegistrationDto user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
     }
 
+    @PreAuthorize("hasAuthority('USER_READ')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable long userId) {
         Optional<LiteUserDTO> user = userService.getUserById(userId);
@@ -32,6 +36,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasAuthority('USER_DELETE')")
     @DeleteMapping("/remove/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable long userId) {
         boolean deleted = userService.deleteUser(userId);

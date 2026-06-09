@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @AllArgsConstructor
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity      //enables method-level security annotations like @PreAuthorize, @PostAuthorize, @Secured etc
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
@@ -35,9 +37,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()                                                       // Allow AuthController endpoints without authentication
 //                                .requestMatchers("/api/users/**").hasRole("ADMIN")                                             // Only allow users with ROLE_ADMIN to access UserController endpoints
-                                .requestMatchers(HttpMethod.GET,"/api/users/**").hasAuthority(Permissions.USER_READ.name())    // Only allow users with USER_READ permission to access GET endpoints of UserController
-                                .requestMatchers(HttpMethod.POST,"/api/users/**").hasAuthority(Permissions.USER_CREATE.name())  // Only allow users with USER_CREATE permission to access POST endpoints of UserController
-                                .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAuthority(Permissions.USER_DELETE.name())  // Only allow users with USER_DELETE permission to access DELETE endpoints of UserController
+//                                .requestMatchers(HttpMethod.GET,"/api/users/**").hasAuthority(Permissions.USER_READ.name())    // Only allow users with USER_READ permission to access GET endpoints of UserController
+//                                .requestMatchers(HttpMethod.POST,"/api/users/**").hasAuthority(Permissions.USER_CREATE.name())  // Only allow users with USER_CREATE permission to access POST endpoints of UserController
+//                                .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAuthority(Permissions.USER_DELETE.name())  // Only allow users with USER_DELETE permission to access DELETE endpoints of UserController
                                 .anyRequest().authenticated())                                                                   // Require authentication for all other requests
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);                                         // Disable default form login and basic auth
